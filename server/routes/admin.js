@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { prisma } from '../lib/prisma.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
 import { activatePlanForUser } from '../lib/accountService.js'
+import { sendSmtpTestEmail } from '../mailer.js'
 import { isPurchasablePlan, PLAN_CATALOG, PURCHASABLE_PLAN_CODES } from '../lib/plans.js'
 
 const router = Router()
@@ -13,6 +14,16 @@ const STATUSES = ['PENDING', 'ACTIVE', 'EXPIRED', 'SUSPENDED', 'CANCELLED']
 
 // Solo CEO y SUPER_ADMIN acceden al panel.
 router.use(requireAuth, requireRole(['CEO', 'SUPER_ADMIN']))
+
+router.post('/test-email', async (_req, res) => {
+  try {
+    await sendSmtpTestEmail()
+    return res.status(200).json({ success: true })
+  } catch (error) {
+    console.error('SMTP test email failed:', error)
+    return res.status(500).json({ success: false, error: error?.message || 'Unknown error' })
+  }
+})
 
 function serializeUser(user) {
   return {

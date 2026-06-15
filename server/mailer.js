@@ -47,6 +47,16 @@ async function deliver({ to, subject, text, html, replyTo }) {
   })
 }
 
+export async function sendSmtpTestEmail() {
+  await transporter.sendMail({
+    from: config.mailFrom,
+    to: 'agustinezequielmoreno@gmail.com',
+    subject: 'WebForge SMTP Test',
+    text: 'SMTP test successful',
+    html: 'SMTP test successful',
+  })
+}
+
 // 1) Formulario de contacto de la home pública → CEO.
 export async function sendContactEmail(payload) {
   const { nombre, email, servicio, mensaje } = payload

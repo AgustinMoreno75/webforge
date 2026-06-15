@@ -12,6 +12,7 @@ export default defineConfig({
         login: path.resolve(__dirname, 'login.html'),
         admin: path.resolve(__dirname, 'admin.html'),
         cuenta: path.resolve(__dirname, 'cuenta.html'),
+        plans: path.resolve(__dirname, 'plans.html'),
         register: path.resolve(__dirname, 'register.html'),
         verifyEmail: path.resolve(__dirname, 'verify-email.html'),
         resetPassword: path.resolve(__dirname, 'reset-password.html'),

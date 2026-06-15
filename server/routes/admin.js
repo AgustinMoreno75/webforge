@@ -15,7 +15,7 @@ const STATUSES = ['PENDING', 'ACTIVE', 'EXPIRED', 'SUSPENDED', 'CANCELLED']
 // Solo CEO y SUPER_ADMIN acceden al panel.
 router.use(requireAuth, requireRole(['CEO', 'SUPER_ADMIN']))
 
-router.post('/test-email', async (_req, res) => {
+router.get('/test-email', async (_req, res) => {
   try {
     await sendSmtpTestEmail()
     return res.status(200).json({ success: true })

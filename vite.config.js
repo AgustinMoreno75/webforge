@@ -10,6 +10,7 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, 'index.html'),
         login: path.resolve(__dirname, 'login.html'),
+        cuenta: path.resolve(__dirname, 'cuenta.html'),
       },
     },
   },

@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 // Color secundario de marca: azul.
 const BRAND_BLUE = '#2563eb'
-const BRAND_BLUE_DARK = '#1d4ed8'
+// const BRAND_BLUE_DARK = '#1d4ed8'
 const INK = '#0b1d3a'
 
 function layout({ title, accent = BRAND_BLUE, bodyHtml }) {

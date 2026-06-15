@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebForge | Terminos y Condiciones</title>
+    <link rel="icon" type="image/png" href="/assets/WebForgeLogoMain.png" />
+    <style>
+      :root {
+        --wf-dark-blue: #0b1d3a;
+        --wf-cyan: #22c1c3;
+        --wf-purple: #6a5ae0;
+        --wf-orange: #ff8a3d;
+        --wf-red: #ff4d5a;
+        --wf-white: #ffffff;
+        --wf-border: rgba(229, 231, 235, 0.2);
+        --wf-surface: rgba(8, 20, 42, 0.78);
+        --wf-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+        --wf-gradient: linear-gradient(110deg, var(--wf-cyan), var(--wf-purple), var(--wf-orange), var(--wf-red));
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background:
+          radial-gradient(circle at 10% -20%, rgba(34, 193, 195, 0.22), transparent 46%),
+          radial-gradient(circle at 92% 20%, rgba(106, 90, 224, 0.2), transparent 36%),
+          radial-gradient(circle at 50% 110%, rgba(255, 77, 90, 0.2), transparent 43%),
+          var(--wf-dark-blue);
+        color: var(--wf-white);
+        padding: 24px;
+      }
+
+      .container {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+        border: 1px solid var(--wf-border);
+        border-radius: 18px;
+        background: var(--wf-surface);
+        padding: 26px;
+        box-shadow: var(--wf-shadow);
+        backdrop-filter: blur(14px);
+      }
+
+      h1 {
+        margin: 0;
+        font-family: "Montserrat", sans-serif;
+        font-size: clamp(1.35rem, 1rem + 1vw, 2rem);
+      }
+
+      p {
+        color: rgba(229, 231, 235, 0.88);
+        line-height: 1.6;
+      }
+
+      .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 10px;
+      }
+
+      .back-link {
+        color: var(--wf-cyan);
+        text-decoration: none;
+        font-size: 0.88rem;
+      }
+
+      .document-shell {
+        margin-top: 14px;
+        border: 1px solid rgba(229, 231, 235, 0.16);
+        border-radius: 14px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .pdf-viewer {
+        width: 100%;
+        height: min(74vh, 940px);
+        border: 0;
+      }
+
+      .fallback {
+        padding: 22px;
+      }
+
+      .actions {
+        margin-top: 18px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .download-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 12px;
+        border: 0;
+        background: var(--wf-gradient);
+        background-size: 200% 200%;
+        color: var(--wf-white);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        box-shadow: 0 10px 24px rgba(255, 138, 61, 0.28);
+        transition: transform 0.22s ease, box-shadow 0.22s ease, background-position 0.45s ease;
+      }
+
+      .download-btn:hover,
+      .download-btn:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px rgba(255, 77, 90, 0.34);
+        background-position: 100% 0;
+      }
+
+      @media (max-width: 680px) {
+        .container {
+          padding: 20px;
+        }
+
+        .head {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .pdf-viewer {
+          height: 66vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container" aria-label="Terminos y condiciones">
+      <div class="head">
+        <h1>Terminos y Condiciones</h1>
+        <a class="back-link" href="/register.html">Volver al registro</a>
+      </div>
+
+      <p>
+        A continuacion puedes revisar el documento oficial de Terminos y Condiciones de WebForge.
+      </p>
+
+      <section class="document-shell" aria-label="Documento de terminos en PDF">
+        <object
+          class="pdf-viewer"
+          data="/legal/terminos-webforge.pdf"
+          type="application/pdf"
+          aria-label="PDF de terminos y condiciones"
+        >
+          <div class="fallback">
+            <p>
+              Tu navegador no pudo mostrar el PDF embebido.
+              <a class="back-link" href="/legal/terminos-webforge.pdf" target="_blank" rel="noopener">
+                Haz clic aqui para abrirlo.
+              </a>
+            </p>
+          </div>
+        </object>
+      </section>
+
+      <div class="actions">
+        <a class="download-btn" href="/legal/terminos-webforge.pdf" download="terminos-y-condiciones-webforge.pdf">
+          Descargar terminos y condiciones
+        </a>
+      </div>
+    </main>
+  </body>
+</html>

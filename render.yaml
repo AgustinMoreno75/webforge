@@ -1,0 +1,71 @@
+services:
+  - type: web
+    name: webforge-app
+    runtime: node
+    plan: starter
+    buildCommand: npm ci && npm run db:generate && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: APP_BASE_URL
+        value: https://getwebforge.com
+      - key: APP_ORIGIN
+        value: https://getwebforge.com
+      - key: TRUST_PROXY
+        value: "true"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: GOOGLE_CLIENT_ID
+        value: 1092276043565-kkt0eh32fr5pmnmbh5qku1q1oatfa4tl.apps.googleusercontent.com
+      - key: GOOGLE_ANALYTICS_ID
+        value: G-0106CF2ZET
+      - key: AUTH_MAX_FAILED_ATTEMPTS
+        value: "5"
+      - key: AUTH_LOCKOUT_MINUTES
+        value: "15"
+      - key: SMTP_HOST
+        value: smtp.resend.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        value: resend
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM
+        value: WebForge <hola@getwebforge.com>
+      - key: CONTACT_TO_EMAIL
+        value: agustinezequielmoreno@gmail.com
+      - key: BLOCKED_IPS
+        value: ""
+      - key: RECAPTCHA_ENABLED
+        value: "true"
+      - key: RECAPTCHA_SECRET_KEY
+        sync: false
+      - key: RECAPTCHA_MIN_SCORE
+        value: "0.5"
+      - key: VITE_RECAPTCHA_SITE_KEY
+        sync: false
+      - key: JOBS_ENABLED
+        value: "true"
+      - key: JOBS_TIMEZONE
+        value: America/Argentina/Buenos_Aires
+      - key: JOB_PLAN_LIFECYCLE
+        value: '0 9 * * *'
+      - key: CORE_ACCOUNT_CEO_FULL_NAME
+        value: CEOWebForge
+      - key: CORE_ACCOUNT_CEO_EMAIL
+        value: agustinezequielmoreno@gmail.com
+      - key: CORE_ACCOUNT_CEO_PASSWORD
+        sync: false
+      - key: CORE_ACCOUNT_CEO_PASSWORD_HASH
+        sync: false

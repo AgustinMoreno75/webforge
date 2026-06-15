@@ -1,0 +1,107 @@
+// WebForge — modelo de datos simplificado
+// Plataforma para 10-50 clientes. Roles: CEO, SUPER_ADMIN, LEAD, CLIENT.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  CEO
+  SUPER_ADMIN
+  LEAD
+  CLIENT
+}
+
+enum PlanCode {
+  NONE
+  STARTER
+  PREMIUM
+  BUSINESS
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  SUSPENDED
+  CANCELLED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+model User {
+  id              String      @id @default(cuid())
+  name            String
+  email           String      @unique
+  emailVerifiedAt DateTime?
+  phone           String?
+  passwordHash    String
+  accountType     AccountType @default(LEAD)
+  plan            PlanCode    @default(NONE)
+  status          UserStatus  @default(PENDING)
+  planStartDate   DateTime?
+  planEndDate     DateTime?
+  lastPaymentDate DateTime?
+  isActive        Boolean     @default(true)
+  tickets         Ticket[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([accountType])
+  @@index([plan])
+  @@index([status])
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  userId      String
+  subject     String
+  description String
+  status      TicketStatus @default(OPEN)
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId, status])
+}
+
+// Seguridad de autenticación (bloqueo por intentos + auditoría).
+// Gestionadas con SQL crudo desde server/lib/securityStore.js.
+
+model AuthSecurity {
+  id                  String    @id @db.Text
+  email               String    @unique @db.Text
+  userId              String?   @unique @map("user_id") @db.Text
+  failedLoginAttempts Int       @default(0) @map("failed_login_attempts")
+  lockoutUntil        DateTime? @map("lockout_until") @db.Timestamptz(6)
+  mustChangePassword  Boolean   @default(false) @map("must_change_password")
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([email], map: "idx_auth_security_email")
+  @@map("auth_security")
+}
+
+model AuthEventLog {
+  id        String   @id @db.Text
+  eventType String   @map("event_type") @db.Text
+  email     String?  @db.Text
+  userId    String?  @map("user_id") @db.Text
+  success   Boolean
+  reason    String?  @db.Text
+  ipAddress String?  @map("ip_address") @db.Text
+  userAgent String?  @map("user_agent") @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([createdAt], map: "idx_auth_event_log_created_at")
+  @@map("auth_event_log")
+}

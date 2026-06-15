@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi cuenta | WebForge</title>
+  <link rel="icon" type="image/png" href="/assets/WebForgeLogoMain.png" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --bg-soft: #0f172a;
+      --card: #131c31;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --green: #16a34a;
+      --amber: #f59e0b;
+      --red: #dc2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(1200px 600px at 80% -10%, #16213f 0%, var(--bg) 55%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: rgba(11, 17, 32, 0.85); backdrop-filter: blur(8px); z-index: 10;
+    }
+    .brand { font-weight: 800; letter-spacing: -0.02em; font-size: 1.15rem; color: var(--text); }
+    .brand span { color: var(--blue); }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-user { color: var(--muted); font-size: 0.9rem; }
+    .topbar-link {
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.04);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .topbar-link:hover { border-color: var(--blue); background: rgba(37,99,235,0.12); }
+    .btn {
+      border: 1px solid var(--border); background: transparent; color: var(--text);
+      padding: 9px 16px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { border-color: var(--blue); }
+    .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .btn-primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+    .btn-danger { border-color: rgba(220,38,38,0.4); color: #fca5a5; }
+    .btn-danger:hover { background: rgba(220,38,38,0.12); border-color: var(--red); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    main { max-width: 1040px; margin: 0 auto; padding: 32px 24px 80px; }
+    .hello { font-size: 1.7rem; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.02em; }
+    .hello-sub { color: var(--muted); margin: 0 0 28px; }
+    .grid { display: grid; gap: 18px; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .card {
+      background: linear-gradient(180deg, var(--card), var(--bg-soft));
+      border: 1px solid var(--border); border-radius: 16px; padding: 22px;
+    }
+    .card h3 { margin: 0 0 14px; font-size: 1.05rem; }
+    .card h2 { margin: 0 0 6px; font-size: 1.25rem; }
+    .section-title { font-size: 1.15rem; font-weight: 700; margin: 36px 0 14px; }
+    .kpi { display: flex; flex-direction: column; gap: 6px; }
+    .kpi .k { color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .kpi .v { font-size: 1.5rem; font-weight: 800; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+    .badge.ACTIVE { background: rgba(22,163,74,0.16); color: #4ade80; }
+    .badge.PENDING { background: rgba(245,158,11,0.16); color: #fcd34d; }
+    .badge.EXPIRED, .badge.SUSPENDED, .badge.CANCELLED { background: rgba(220,38,38,0.16); color: #fca5a5; }
+    .badge.OPEN { background: rgba(37,99,235,0.18); color: #93c5fd; }
+    .badge.IN_PROGRESS { background: rgba(245,158,11,0.16); color: #fcd34d; }
+    .badge.CLOSED { background: rgba(148,163,184,0.16); color: #cbd5e1; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin: 0 0 6px; }
+    input, textarea, select {
+      width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--border);
+      background: #0b1428; color: var(--text); font-size: 0.95rem; font-family: inherit;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue); }
+    textarea {
+      min-height: 132px;
+      resize: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overflow-wrap: anywhere;
+    }
+    .field { margin-bottom: 14px; }
+    .plan-card { display: flex; flex-direction: column; }
+    .plan-price { font-size: 1.8rem; font-weight: 800; margin: 4px 0 2px; }
+    .plan-price small { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+    .plan-features { list-style: none; padding: 0; margin: 14px 0 20px; display: grid; gap: 8px; }
+    .plan-features li { color: var(--muted); font-size: 0.9rem; padding-left: 22px; position: relative; }
+    .plan-features li::before { content: "✓"; color: var(--blue); position: absolute; left: 0; font-weight: 800; }
+    .plan-card.featured { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue) inset; }
+    .benefit { display: flex; gap: 12px; align-items: flex-start; }
+    .benefit .ico { width: 36px; height: 36px; border-radius: 10px; background: rgba(37,99,235,0.16); display: grid; place-items: center; color: #93c5fd; font-weight: 800; flex: none; }
+    .benefit p { margin: 0; }
+    .benefit .bt { font-weight: 700; }
+    .benefit .bd { color: var(--muted); font-size: 0.9rem; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .ticket-item { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .ticket-item .tk-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+    .ticket-item .tk-sub { font-weight: 700; }
+    .ticket-item .tk-desc { color: var(--muted); font-size: 0.9rem; margin: 6px 0 0; }
+    .ticket-item .tk-date { color: var(--muted); font-size: 0.78rem; }
+    .toast {
+      position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+      background: #0f172a; border: 1px solid var(--border); padding: 12px 20px; border-radius: 12px;
+      font-size: 0.9rem; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 50;
+    }
+    .toast.show { opacity: 1; }
+    .toast.ok { border-color: var(--green); }
+    .toast.err { border-color: var(--red); }
+    .muted { color: var(--muted); }
+    .hidden { display: none !important; }
+    .center-loading { text-align: center; padding: 80px 0; color: var(--muted); }
+    .dl { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+    .dl .k { color: var(--muted); font-size: 0.82rem; }
+    .dl .v { font-weight: 600; }
+    .success-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .success-card .sc-tag { color: #93c5fd; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+    .lead-step-card {
+      padding: 28px;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at top right, rgba(37,99,235,0.24), transparent 34%),
+        linear-gradient(180deg, rgba(19,28,49,0.98), rgba(15,23,42,0.98));
+      border: 1px solid rgba(37,99,235,0.32);
+      box-shadow: 0 18px 48px rgba(2, 6, 23, 0.28);
+    }
+    .lead-step-kicker {
+      margin: 0 0 10px;
+      color: #93c5fd;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .lead-step-title { margin: 0 0 10px; font-size: 1.75rem; line-height: 1.1; letter-spacing: -0.03em; }
+    .lead-step-copy { margin: 0; max-width: 720px; color: var(--muted); font-size: 1rem; }
+    .lead-step-actions { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .lead-step-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 56px; padding: 0 26px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), #3b82f6);
+      color: #fff; font-weight: 800; font-size: 0.96rem;
+      box-shadow: 0 16px 28px rgba(37,99,235,0.28);
+    }
+    .lead-step-btn:hover { background: linear-gradient(135deg, var(--blue-dark), var(--blue)); }
+    .lead-step-link { display: inline-flex; align-items: center; color: #bfdbfe; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">Web<span>Forge</span></a>
+    <div class="topbar-right">
+      <a class="topbar-link hidden" id="public-site-link" href="/">Volver</a>
+      <span class="topbar-user" id="topbar-user"></span>
+      <button class="btn" id="logout-btn">Salir</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="loading" class="center-loading">Cargando tu cuenta…</div>
+    <div id="app" class="hidden"></div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const TOKEN_KEY = 'webforge_token'
+    const USER_KEY = 'webforge_user'
+    const token = localStorage.getItem(TOKEN_KEY)
+
+    if (!token) {
+      window.location.href = '/login.html'
+    }
+
+    let currentUser = null
+    let plansCache = []
+
+    function authHeaders(extra) {
+      return Object.assign({ Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY) || ''}` }, extra || {})
+    }
+
+    async function api(path, options = {}) {
+      const opts = Object.assign({}, options)
+      opts.headers = authHeaders(Object.assign({ 'Content-Type': 'application/json' }, options.headers || {}))
+      const res = await fetch(path, opts)
+      if (res.status === 401) {
+        localStorage.removeItem(TOKEN_KEY)
+        localStorage.removeItem(USER_KEY)
+        window.location.href = '/login.html'
+        throw new Error('No autorizado')
+      }
+      const data = await res.json().catch(() => ({}))
+      return { ok: res.ok, status: res.status, data }
+    }
+
+    function toast(message, type = 'ok') {
+      const el = document.getElementById('toast')
+      el.textContent = message
+      el.className = `toast show ${type}`
+      setTimeout(() => { el.className = 'toast' }, 3200)
+    }
+
+    function fmtDate(value) {
+      if (!value) return '—'
+      return new Date(value).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })
+    }
+    function fmtMoney(value, currency) {
+      return new Intl.NumberFormat('es-AR', { style: 'currency', currency: currency || 'ARS', maximumFractionDigits: 0 }).format(Number(value || 0))
+    }
+    function esc(value) {
+      return String(value == null ? '' : value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]))
+    }
+
+    const STATUS_LABELS = {
+      PENDING: 'Pendiente', ACTIVE: 'Activo', EXPIRED: 'Vencido', SUSPENDED: 'Suspendido', CANCELLED: 'Cancelado',
+    }
+    const TICKET_STATUS_LABELS = { OPEN: 'Abierto', IN_PROGRESS: 'En progreso', CLOSED: 'Cerrado' }
+
+    async function init() {
+      const me = await api('/api/auth/me')
+      if (!me.ok || !me.data.user) {
+        localStorage.removeItem(TOKEN_KEY)
+        window.location.href = '/login.html'
+        return
+      }
+      currentUser = me.data.user
+      localStorage.setItem(USER_KEY, JSON.stringify(currentUser))
+
+      // El staff usa el panel de administración.
+      if (currentUser.accountType === 'CEO' || currentUser.accountType === 'SUPER_ADMIN') {
+        window.location.href = '/admin.html'
+        return
+      }
+
+      document.getElementById('topbar-user').textContent = currentUser.email
+      if (currentUser.accountType === 'LEAD' || currentUser.accountType === 'CLIENT') {
+        document.getElementById('public-site-link').classList.remove('hidden')
+      }
+      const plans = await api('/api/billing/plans')
+      plansCache = plans.ok ? plans.data.plans : []
+
+      document.getElementById('loading').classList.add('hidden')
+      document.getElementById('app').classList.remove('hidden')
+
+      if (currentUser.accountType === 'CLIENT') {
+        renderClientHome()
+      } else {
+        renderLeadHome()
+      }
+      renderShared()
+      bindShared()
+    }
+
+    /* ---------- HOME LEAD ---------- */
+    function renderLeadHome() {
+      const benefits = [
+        ['◆', 'Sistema digital completo', 'Web, software y automatización en un solo lugar, sin coordinar varios proveedores.'],
+        ['↑', 'Pensado para crecer', 'Arquitectura simple y escalable que acompaña la evolución de tu negocio.'],
+        ['⚡', 'Implementación rápida', 'Activamos tus servicios y te acompañamos en cada paso del onboarding.'],
+        ['◈', 'Soporte real', 'Un canal de tickets directo con el equipo para resolver lo que necesites.'],
+      ]
+      const app = document.getElementById('app')
+      app.innerHTML = `
+        <h1 class="hello">Hola, ${esc(currentUser.name)} 👋</h1>
+        <p class="hello-sub">Estás a un paso de activar tu ecosistema digital. Elegí el plan que mejor se adapte a tu negocio.</p>
+
+        <div class="grid grid-2">
+          ${benefits.map((b) => `
+            <div class="card benefit">
+              <div class="ico">${b[0]}</div>
+              <div><p class="bt">${esc(b[1])}</p><p class="bd">${esc(b[2])}</p></div>
+            </div>`).join('')}
+        </div>
+
+        <div class="section-title">Elige Tu Primer Paso</div>
+        <div class="lead-step-card">
+          <p class="lead-step-kicker">Ruta recomendada para leads</p>
+          <h2 class="lead-step-title">Definí tu plan ideal y activemos tu primer sistema</h2>
+          <p class="lead-step-copy">Revisá los planes públicos, elegí el que mejor encaja con tu etapa y enviá tu solicitud. Cuando la recibamos, te contactamos para activar tu plan y poner en marcha tu ecosistema digital.</p>
+          <div class="lead-step-actions">
+            <a class="lead-step-btn" href="/plans.html">Ir a Planes WebForge</a>
+            <a class="lead-step-link" href="/plans.html#top">Ver detalle completo de Starter, Premium y Business</a>
+          </div>
+        </div>
+
+        <div class="section-title">Tu perfil y soporte</div>
+        <div id="shared-mount" class="grid grid-2"></div>
+      `
+    }
+
+    /* ---------- HOME CLIENT ---------- */
+    function renderClientHome() {
+      const plan = plansCache.find((p) => p.code === currentUser.plan)
+      const app = document.getElementById('app')
+      app.innerHTML = `
+        <h1 class="hello">Hola, ${esc(currentUser.name)} 👋</h1>
+        <p class="hello-sub">Este es el estado de tu servicio WebForge.</p>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Estado del plan</h3>
+            <div class="dl">
+              <div class="k">Plan</div><div class="v">${esc(plan ? plan.name : currentUser.plan)}</div>
+              <div class="k">Estado</div><div class="v"><span class="badge ${esc(currentUser.status)}">${esc(STATUS_LABELS[currentUser.status] || currentUser.status)}</span></div>
+              <div class="k">Inicio</div><div class="v">${fmtDate(currentUser.planStartDate)}</div>
+              <div class="k">Próximo vencimiento</div><div class="v">${fmtDate(currentUser.planEndDate)}</div>
+              <div class="k">Último pago</div><div class="v">${fmtDate(currentUser.lastPaymentDate)}</div>
+            </div>
+            <div class="row" style="margin-top:18px;">
+              <button class="btn" id="upgrade-btn">Mejorar plan</button>
+              <button class="btn btn-danger" id="cancel-btn">Cancelar plan</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Tu servicio incluye</h3>
+            ${plan ? `<ul class="plan-features">${plan.features.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>` : '<p class="muted">Tu plan no tiene detalle de servicios.</p>'}
+          </div>
+        </div>
+
+        <div class="section-title">Soporte</div>
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Abrir un ticket</h3>
+            <p class="muted" style="margin-top:-6px;font-size:0.88rem;">Podés tener 1 ticket abierto a la vez.</p>
+            <form id="ticket-form">
+              <div class="field"><label>Asunto</label><input name="subject" maxlength="140" placeholder="Resumen del problema" required /></div>
+              <div class="field"><label>Descripción</label><textarea name="description" rows="5" maxlength="3000" placeholder="Contanos en detalle qué necesitás." required></textarea></div>
+              <button class="btn btn-primary" type="submit">Enviar ticket</button>
+            </form>
+          </div>
+          <div class="card">
+            <h3>Mis tickets</h3>
+            <div id="tickets-list"><p class="muted">Cargando…</p></div>
+          </div>
+        </div>
+
+        <div class="section-title">Tu perfil y seguridad</div>
+        <div id="shared-mount" class="grid grid-2"></div>
+
+        <div id="upgrade-plans" class="hidden">
+          <div class="section-title">Elegí tu nuevo plan</div>
+          <div class="grid grid-3">${renderPlanCards(false)}</div>
+        </div>
+      `
+      bindClientActions()
+      loadTickets()
+      bindPlanButtons()
+    }
+
+    function renderPlanCards(isLead) {
+      if (!plansCache.length) return '<p class="muted">No hay planes disponibles.</p>'
+      return plansCache.map((p) => `
+        <div class="card plan-card ${p.code === 'PREMIUM' ? 'featured' : ''}">
+          <h2>${esc(p.name)}</h2>
+          <div class="plan-price">${fmtMoney(p.price, p.currency)} <small>/ mes</small></div>
+          <p class="muted" style="font-size:0.88rem;margin:6px 0 0;">${esc(p.description)}</p>
+          <ul class="plan-features">${p.features.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
+          <button class="btn btn-primary plan-btn" data-plan="${esc(p.code)}" style="margin-top:auto;">
+            ${isLead ? 'Contratar' : 'Solicitar este plan'}
+          </button>
+        </div>`).join('')
+    }
+
+    function bindPlanButtons() {
+      document.querySelectorAll('.plan-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          btn.disabled = true
+          const res = await api('/api/billing/request', { method: 'POST', body: JSON.stringify({ plan: btn.dataset.plan }) })
+          btn.disabled = false
+          if (res.ok) toast(res.data.message || 'Solicitud enviada.', 'ok')
+          else toast(res.data.message || 'No se pudo enviar la solicitud.', 'err')
+        })
+      })
+    }
+
+    function bindClientActions() {
+      const upgradeBtn = document.getElementById('upgrade-btn')
+      if (upgradeBtn) upgradeBtn.addEventListener('click', () => {
+        document.getElementById('upgrade-plans').classList.toggle('hidden')
+        document.getElementById('upgrade-plans').scrollIntoView({ behavior: 'smooth' })
+      })
+      const cancelBtn = document.getElementById('cancel-btn')
+      if (cancelBtn) cancelBtn.addEventListener('click', async () => {
+        if (!confirm('¿Seguro que querés cancelar tu plan? Tus servicios quedarán en pausa.')) return
+        cancelBtn.disabled = true
+        const res = await api('/api/billing/cancel', { method: 'POST', body: JSON.stringify({}) })
+        cancelBtn.disabled = false
+        if (res.ok) { toast('Tu plan fue cancelado.', 'ok'); setTimeout(() => location.reload(), 1200) }
+        else toast(res.data.message || 'No se pudo cancelar.', 'err')
+      })
+      const form = document.getElementById('ticket-form')
+      if (form) form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const fd = new FormData(form)
+        const body = JSON.stringify({ subject: fd.get('subject'), description: fd.get('description') })
+        const submitBtn = form.querySelector('button[type=submit]')
+        submitBtn.disabled = true
+        const res = await api('/api/tickets', { method: 'POST', body })
+        submitBtn.disabled = false
+        if (res.ok) { toast('Ticket enviado. Te responderemos pronto.', 'ok'); form.reset(); loadTickets() }
+        else toast(res.data.message || 'No se pudo crear el ticket.', 'err')
+      })
+    }
+
+    async function loadTickets() {
+      const list = document.getElementById('tickets-list')
+      if (!list) return
+      const res = await api('/api/tickets/mine')
+      if (!res.ok || !res.data.tickets.length) { list.innerHTML = '<p class="muted">Todavía no tenés tickets.</p>'; return }
+      list.innerHTML = res.data.tickets.map((t) => `
+        <div class="ticket-item">
+          <div class="tk-top">
+            <span class="tk-sub">${esc(t.subject)}</span>
+            <span class="badge ${esc(t.status)}">${esc(TICKET_STATUS_LABELS[t.status] || t.status)}</span>
+          </div>
+          <p class="tk-desc">${esc(t.description)}</p>
+          <p class="tk-date">${fmtDate(t.createdAt)}</p>
+        </div>`).join('')
+    }
+
+    /* ---------- SHARED: perfil + seguridad ---------- */
+    function renderShared() {
+      const mount = document.getElementById('shared-mount')
+      if (!mount) return
+      mount.innerHTML = `
+        <div class="card">
+          <h3>Información personal</h3>
+          <form id="profile-form">
+            <div class="field"><label>Nombre</label><input name="name" value="${esc(currentUser.name)}" required /></div>
+            <div class="field"><label>Teléfono ${currentUser.accountType === 'LEAD' ? '<span class="muted">(obligatorio para solicitar un plan)</span>' : ''}</label><input name="phone" value="${esc(currentUser.phone || '')}" placeholder="+54 9 ..." ${currentUser.accountType === 'LEAD' ? 'required minlength="5"' : ''} /></div>
+            <div class="field"><label>Email</label><input name="email" type="email" value="${esc(currentUser.email)}" required /></div>
+            <button class="btn btn-primary" type="submit">Guardar cambios</button>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Seguridad</h3>
+          <form id="password-form">
+            <div class="field"><label>Contraseña actual</label><input name="currentPassword" type="password" required /></div>
+            <div class="field"><label>Nueva contraseña</label><input name="newPassword" type="password" minlength="8" required /></div>
+            <button class="btn btn-primary" type="submit">Cambiar contraseña</button>
+          </form>
+        </div>
+      `
+    }
+
+    function bindShared() {
+      const profileForm = document.getElementById('profile-form')
+      if (profileForm) profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const fd = new FormData(profileForm)
+        const res = await api('/api/auth/profile', { method: 'PATCH', body: JSON.stringify({ name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email') }) })
+        if (res.ok) {
+          if (res.data.token) localStorage.setItem(TOKEN_KEY, res.data.token)
+          toast('Perfil actualizado.', 'ok')
+        } else toast(res.data.message || 'No se pudo actualizar.', 'err')
+      })
+      const passwordForm = document.getElementById('password-form')
+      if (passwordForm) passwordForm.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const fd = new FormData(passwordForm)
+        const res = await api('/api/auth/password', { method: 'PATCH', body: JSON.stringify({ currentPassword: fd.get('currentPassword'), newPassword: fd.get('newPassword') }) })
+        if (res.ok) { toast('Contraseña actualizada.', 'ok'); passwordForm.reset() }
+        else toast(res.data.message || 'No se pudo cambiar la contraseña.', 'err')
+      })
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(USER_KEY)
+      window.location.href = '/login.html'
+    })
+
+    init().catch((err) => {
+      console.error(err)
+      document.getElementById('loading').textContent = 'Ocurrió un error al cargar tu cuenta.'
+    })
+  </script>
+</body>
+</html>

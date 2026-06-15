@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes WebForge | Starter, Premium y Business</title>
+    <meta name="description" content="Conoce los planes Starter, Premium y Business de WebForge. Elige la suscripción ideal para escalar tu negocio con software, automatización e inteligencia artificial.">
+    <link rel="canonical" href="https://getwebforge.com/plans.html">
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_AR">
+    <meta property="og:site_name" content="WebForge">
+    <meta property="og:title" content="Planes WebForge | Starter, Premium y Business">
+    <meta property="og:description" content="Suscripciones WebForge para empresas: Starter, Premium y Business. Elige el plan según tu etapa de crecimiento.">
+    <meta property="og:url" content="https://getwebforge.com/plans.html">
+    <meta property="og:image" content="https://getwebforge.com/assets/WebForgeLogoMain.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Planes WebForge | Starter, Premium y Business">
+    <meta name="twitter:description" content="Selecciona tu plan WebForge y escala con sistemas digitales orientados a resultados.">
+    <meta name="twitter:image" content="https://getwebforge.com/assets/WebForgeLogoMain.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="frontend/css/main.css">
+    <link rel="stylesheet" href="frontend/css/plans.css">
+    <link rel="icon" href="assets/WebForgeLogoMain.png" type="image/png">
+        <style>
+            .billing-modal[hidden] {
+                display: none;
+            }
+
+            .billing-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 1200;
+                display: grid;
+                place-items: center;
+                padding: 24px;
+                background: rgba(4, 10, 18, 0.74);
+                backdrop-filter: blur(10px);
+            }
+
+            .billing-modal__panel {
+                width: min(980px, 100%);
+                min-height: min(86vh, 760px);
+                border-radius: 28px;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                background: linear-gradient(180deg, rgba(9, 16, 26, 0.98), rgba(12, 21, 34, 0.98));
+                box-shadow: 0 28px 90px rgba(0, 0, 0, 0.45);
+            }
+
+            .billing-modal__header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                padding: 20px 24px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .billing-modal__title {
+                margin: 0;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.05rem;
+                color: #f5f7fb;
+            }
+
+            .billing-modal__subtitle {
+                margin: 4px 0 0;
+                color: rgba(232, 236, 242, 0.72);
+                font-size: 0.92rem;
+            }
+
+            .billing-modal__close {
+                appearance: none;
+                border: 1px solid rgba(255, 255, 255, 0.16);
+                background: rgba(255, 255, 255, 0.05);
+                color: #f5f7fb;
+                width: 42px;
+                height: 42px;
+                border-radius: 999px;
+                cursor: pointer;
+                font-size: 1.1rem;
+            }
+
+            .billing-modal__body {
+                height: calc(min(86vh, 760px) - 85px);
+                background: #0b1017;
+            }
+
+            .billing-modal__status {
+                display: grid;
+                place-items: center;
+                height: 100%;
+                padding: 32px;
+                color: rgba(245, 247, 251, 0.88);
+                text-align: center;
+            }
+
+            .billing-modal__status strong {
+                display: block;
+                margin-bottom: 10px;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1.08rem;
+                color: #ffffff;
+            }
+
+            .billing-modal__iframe {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                background: #ffffff;
+            }
+
+            .plans-flow-message {
+                position: fixed;
+                top: 24px;
+                left: 50%;
+                z-index: 1200;
+                width: min(560px, calc(100% - 32px));
+                padding: 18px 22px;
+                border-radius: 18px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                background: rgba(8, 15, 25, 0.94);
+                color: rgba(243, 246, 249, 0.96);
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1rem;
+                font-weight: 700;
+                line-height: 1.55;
+                text-align: center;
+                box-shadow: 0 24px 56px rgba(0, 0, 0, 0.42);
+                backdrop-filter: blur(14px);
+                -webkit-backdrop-filter: blur(14px);
+                transform: translate(-50%, -18px);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.24s ease, transform 0.24s ease;
+            }
+
+            .plans-flow-message.is-visible {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+
+            .plans-flow-message[data-tone="success"] {
+                border-color: rgba(78, 201, 176, 0.42);
+                background: linear-gradient(160deg, rgba(7, 53, 43, 0.96), rgba(8, 15, 25, 0.95));
+                color: #dcfdf3;
+            }
+
+            .plans-flow-message[data-tone="error"] {
+                border-color: rgba(255, 111, 111, 0.38);
+                background: linear-gradient(160deg, rgba(70, 18, 26, 0.96), rgba(20, 9, 15, 0.95));
+                color: #ffe4e6;
+            }
+
+            @media (max-width: 640px) {
+                .plans-flow-message {
+                    top: 16px;
+                    width: min(100% - 24px, 100%);
+                    padding: 16px 18px;
+                    font-size: 0.95rem;
+                }
+            }
+        </style>
+</head>
+<body class="plans-page">
+    <header class="site-header" id="top">
+        <div class="header-container">
+            <a class="brand" href="index.html#inicio" aria-label="WebForge inicio">
+                <img src="assets/WebForgeLogo-NoBackground.png" alt="WebForge" class="brand-logo">
+                <div class="brand-copy">
+                    <span class="brand-name">WebForge</span>
+                    <span class="brand-tag">Ecosistema Tecnológico</span>
+                </div>
+            </a>
+
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Abrir menú de navegación">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" aria-label="Navegación principal">
+                <ul class="nav-list" id="primary-nav">
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#servicios">Servicios</a></li>
+                    <li><a href="index.html#soluciones">Soluciones</a></li>
+                    <li><a href="plans.html" class="menu-active">Planes</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                    <li class="nav-mobile-item"><a href="/login.html" class="header-login nav-mobile-login" id="plans-auth-btn-mobile">Login</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions" aria-label="Acciones de usuario">
+                <a href="/login.html" class="header-login" id="plans-auth-btn">Login</a>
+                <a href="index.html#contacto" class="header-cta" data-cta="header_diagnostico_plans">Agendar diagnóstico</a>
+            </div>
+        </div>
+    </header>
+
+    <main aria-label="Contenido principal">
+        <section class="plans-hero" aria-labelledby="plans-title">
+            <div class="plans-hero-shell reveal-item">
+                <p class="plans-kicker">Planes WebForge</p>
+                <h1 id="plans-title">Elegí el plan que mejor se adapta al ritmo de tu empresa</h1>
+                <p>Todos los planes incluyen acompañamiento técnico y enfoque en resultados. Comienza con Starter, escala con Premium o implementa nivel corporativo con Business.</p>
+            </div>
+        </section>
+
+        <section class="plans-section" aria-label="Planes de suscripción">
+            <div class="plans-grid">
+                <article class="plan-card plan-starter reveal-item" aria-labelledby="starter-title">
+                    <div class="plan-topline">
+                        <h2 id="starter-title">Starter</h2>
+                        <span class="plan-badge">Base</span>
+                    </div>
+                    <p class="plan-description">Ideal para negocios que necesitan presencia digital profesional y un sistema inicial de crecimiento.</p>
+                    <p class="plan-price-before">$ 49.900</p>
+                    <p class="plan-price">$ 34.900 <span>/ mes</span></p>
+                    <p class="plan-note">Solicitud asistida con activación personalizada por el equipo WebForge.</p>
+                    <a href="#" class="plan-cta" data-cta="plan_starter_checkout" data-plan-code="starter">Elegir Starter</a>
+                    <ul class="plan-features" aria-label="Características Starter">
+                        <li>Sitio web profesional (hasta 5 secciones)</li>
+                        <li>Hosting, dominio y certificado SSL</li>
+                        <li>Mantenimiento y actualizaciones mensuales</li>
+                        <li>Backups y seguridad del sitio</li>
+                        <li>Formulario de contacto y botón de WhatsApp</li>
+                        <li>SEO básico y conexión con Google</li>
+                        <li>Panel básico para editar contenido</li>
+                        <li>1 cambio o actualización mensual</li>
+                        <li>Soporte técnico estándar</li>
+                    </ul>
+                    <p class="plan-disclaimer">El precio de la creacion de los sistemas no esta contemplado en el precio del plan.</p>
+                </article>
+
+                <article class="plan-card plan-premium reveal-item" aria-labelledby="premium-title">
+                    <div class="plan-topline">
+                        <h2 id="premium-title">Premium</h2>
+                        <span class="plan-badge">Más elegido</span>
+                    </div>
+                    <p class="plan-description">Pensado para empresas en crecimiento que necesitan sistemas digitales integrados y escalables.</p>
+                    <p class="plan-price-before">$ 79.900</p>
+                    <p class="plan-price">$ 59.900 <span>/ mes</span></p>
+                    <p class="plan-note">Plan recomendado para operaciones en expansión.</p>
+                    <a href="#" class="plan-cta" data-cta="plan_premium_checkout" data-plan-code="premium">Elegir Premium</a>
+                    <ul class="plan-features" aria-label="Características Premium">
+                        <li><strong>Todo lo del plan Starter</strong></li>
+                        <li>Sistema de reservas / turnos / pedidos</li>
+                        <li>Blog o catálogo de productos</li>
+                        <li>Automatizaciones básicas (emails, formularios, WhatsApp)</li>
+                        <li>Integraciones con redes sociales y herramientas externas</li>
+                        <li>Analíticas avanzadas y reportes mensuales</li>
+                        <li>SEO intermedio y optimización de velocidad</li>
+                        <li>Hasta 3 cambios o actualizaciones mensuales</li>
+                        <li>Soporte prioritario</li>
+                    </ul>
+                    <p class="plan-insight">La mejor relación entre velocidad de ejecución y escalabilidad.</p>
+                    <p class="plan-disclaimer">El precio de la creacion de los sistemas no esta contemplado en el precio del plan.</p>
+                </article>
+
+                <article class="plan-card plan-business reveal-item" aria-labelledby="business-title">
+                    <div class="plan-topline">
+                        <h2 id="business-title">Business</h2>
+                        <span class="plan-badge">Enterprise</span>
+                    </div>
+                    <p class="plan-description">Para equipos que necesitan arquitectura robusta, procesos complejos y evolutivos de alto impacto.</p>
+                    <p class="plan-price-before">$ 119.900</p>
+                    <p class="plan-price">$ 89.900 <span>/ mes</span></p>
+                    <p class="plan-note">Implementación integral con foco en performance operativa.</p>
+                    <a href="#" class="plan-cta" data-cta="plan_business_checkout" data-plan-code="business">Elegir Business</a>
+                    <ul class="plan-features" aria-label="Características Business">
+                        <li><strong>Todo lo del plan Premium</strong></li>
+                        <li>Automatizaciones avanzadas y sistemas personalizados</li>
+                        <li>Integraciones con APIs, CRM o sistemas externos</li>
+                        <li>Dashboard y panel administrativo avanzado</li>
+                        <li>Desarrollo continuo de nuevas funcionalidades</li>
+                        <li>Consultoría tecnológica y reuniones estratégicas</li>
+                        <li>Infraestructura escalable y optimización avanzada</li>
+                        <li>Cambios y mejoras mensuales prioritarias</li>
+                        <li>Soporte dedicado y SLA de respuesta</li>
+                    </ul>
+                    <p class="plan-disclaimer">El precio de la creacion de los sistemas no esta contemplado en el precio del plan.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="plans-compare reveal-item" aria-labelledby="compare-title">
+            <div class="plans-compare-shell">
+                <p class="plans-kicker">Comparativa rápida</p>
+                <h2 id="compare-title">Qué incluye cada plan</h2>
+                <div class="compare-table-wrap">
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>Característica</th>
+                                <th>Starter</th>
+                                <th>Premium</th>
+                                <th>Business</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sitio web profesional</td>
+                                <td>Hasta 5 secciones</td>
+                                <td>Todo Starter +</td>
+                                <td>Todo Premium +</td>
+                            </tr>
+                            <tr>
+                                <td>Hosting, dominio y SSL</td>
+                                <td>✓ Incluido</td>
+                                <td>✓ Incluido</td>
+                                <td>✓ Incluido</td>
+                            </tr>
+                            <tr>
+                                <td>Automatizaciones</td>
+                                <td>1 flujo básico</td>
+                                <td>Hasta 3 flujos</td>
+                                <td>Avanzadas sin límite</td>
+                            </tr>
+                            <tr>
+                                <td>Sistema de reservas / catálogo</td>
+                                <td>✗ No incluido</td>
+                                <td>✓ Incluido</td>
+                                <td>✓ Incluido</td>
+                            </tr>
+                            <tr>
+                                <td>Integraciones</td>
+                                <td>Básicas (formulario, WhatsApp)</td>
+                                <td>Redes sociales, herramientas externas</td>
+                                <td>APIs, CRM, sistemas legacy</td>
+                            </tr>
+                            <tr>
+                                <td>Analíticas y reportes</td>
+                                <td>Panel básico</td>
+                                <td>Avanzadas mensuales</td>
+                                <td>Avanzadas + consultoría</td>
+                            </tr>
+                            <tr>
+                                <td>SEO y optimización</td>
+                                <td>SEO básico</td>
+                                <td>SEO intermedio + velocidad</td>
+                                <td>SEO avanzado + infraestructura escalable</td>
+                            </tr>
+                            <tr>
+                                <td>Cambios y actualizaciones</td>
+                                <td>1 mensual</td>
+                                <td>Hasta 3 mensuales</td>
+                                <td>Prioritarias mensuales</td>
+                            </tr>
+                            <tr>
+                                <td>Soporte técnico</td>
+                                <td>Estándar</td>
+                                <td>Prioritario</td>
+                                <td>Dedicado con SLA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="plans-build is-revealed" aria-labelledby="build-title">
+            <div class="plans-build-shell">
+                <p class="plans-kicker">Construcción estándar</p>
+                <h2 id="build-title">Precios estándar de construcción</h2>
+                <p class="plans-build-copy">Estos valores corresponden al desarrollo inicial del producto digital. Luego puedes sumar el plan mensual que mejor acompañe el crecimiento, soporte y evolución de tu sistema.</p>
+                <div class="plans-build-grid">
+                    <article class="build-card">
+                        <p class="build-name">Landing Page</p>
+                        <p class="build-price">$ 59.900</p>
+                    </article>
+                    <article class="build-card">
+                        <p class="build-name">Sitio Web Básico</p>
+                        <p class="build-price">$ 99.900</p>
+                    </article>
+                    <article class="build-card">
+                        <p class="build-name">Sitio Web Avanzado</p>
+                        <p class="build-price">$ 149.900</p>
+                    </article>
+                    <article class="build-card">
+                        <p class="build-name">Tienda Online</p>
+                        <p class="build-price">$ 199.900</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="plans-faq reveal-item" aria-labelledby="faq-title">
+            <div class="plans-faq-shell">
+                <p class="plans-kicker">Preguntas frecuentes</p>
+                <h2 id="faq-title">Todo lo que suele consultarse antes de suscribirse</h2>
+
+                <div class="faq-grid">
+                    <details class="faq-item">
+                        <summary>¿Cuál es la diferencia entre los tres planes?</summary>
+                        <p>Starter es ideal para presencia digital inicial con automatización básica. Premium añade sistema de reservas, blog, automatizaciones avanzadas e integraciones con redes sociales. Business incluye automatizaciones sin límite, APIs y arquitectura custom para operaciones complejas. Ver la tabla de comparación arriba para detalles completos.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Qué incluyen todos los planes?</summary>
+                        <p>Todos los planes incluyen: sitio web profesional, hosting, dominio y certificado SSL, mantenimiento mensual, backups y seguridad, formulario de contacto y botón WhatsApp, SEO básico, panel de edición de contenido, y soporte técnico. Los planes Premium y Business amplían estas características significativamente.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Cuántas automatizaciones incluye cada plan?</summary>
+                        <p>Starter incluye 1 flujo de automatización básico. Premium permite hasta 3 flujos de automatización (emails, formularios, WhatsApp). Business incluye automatizaciones avanzadas sin límite de cantidad, ideales para operaciones complejas.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Qué tipo de integraciones ofrece cada plan?</summary>
+                        <p>Starter ofrece integraciones básicas (formulario y WhatsApp). Premium integra con redes sociales y herramientas externas comunes. Business incluye integraciones con APIs, CRM, sistemas legacy y arquitectura enterprise personalizada.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Premium incluye un blog o catálogo?</summary>
+                        <p>Sí. Premium incluye blog o catálogo de productos según tu necesidad. Esto es perfecto para empresas que necesitan mostrar productos, servicios o contenido editorial. Starter no incluye esto; Business lo puede personalizar completamente según tu arquitectura.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Cuántos cambios mensuales puedo hacer?</summary>
+                        <p>Starter permite 1 cambio o actualización mensual. Premium permite hasta 3 cambios mensuales. Business permite cambios y mejoras mensuales prioritarias con desarrollo continuo. Esto es ideal si tu negocio evoluciona rápidamente.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Qué se incluye en los reportes y analíticas?</summary>
+                        <p>Starter incluye panel básico de métricas. Premium ofrece analíticas avanzadas con reportes mensuales detallados. Business proporciona analíticas avanzadas más consultoría estratégica sobre tus datos. Todos ayudan a entender el performance de tu sitio.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Cómo funciona el soporte técnico?</summary>
+                        <p>Starter ofrece soporte técnico estándar para resolver problemas. Premium incluye soporte prioritario con respuesta rápida. Business incluye soporte dedicado con SLA de respuesta garantizado. Mientras mayor apoyo necesites, mejor es el plan.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Puedo pasar a un plan superior?</summary>
+                        <p>Sí. Puedes comenzar con Starter y escalar a Premium o directamente a Business cuando tu empresa crece. El cambio de plan es flexible y se adapta a tus necesidades. Te acompañaremos en la transición sin interrupciones.</p>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Qué plan recomiendan para una empresa en crecimiento?</summary>
+                        <p>Para empresas en crecimiento, Premium es la opción ideal: ofrece la mejor relación entre funcionalidad y costo. Incluye automatizaciones múltiples, integraciones modernas, analíticas avanzadas y soporte prioritario. Muchas empresas comienzan en Starter y escalan a Premium en 6-12 meses.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="plans-flow-message" id="plans-flow-message" hidden aria-live="polite"></section>
+
+    <div class="billing-modal" id="billing-modal" hidden>
+        <div class="billing-modal__panel" role="dialog" aria-modal="true" aria-labelledby="billing-modal-title">
+            <div class="billing-modal__header">
+                <div>
+                    <h2 class="billing-modal__title" id="billing-modal-title">Suscripción WebForge</h2>
+                    <p class="billing-modal__subtitle" id="billing-modal-subtitle">Preparando checkout seguro...</p>
+                </div>
+                <button class="billing-modal__close" id="billing-modal-close" type="button" aria-label="Cerrar checkout">X</button>
+            </div>
+            <div class="billing-modal__body" id="billing-modal-body">
+                <div class="billing-modal__status" id="billing-modal-status">
+                    <div>
+                        <strong>Inicializando el checkout</strong>
+                        <span>En unos segundos podrás completar la suscripción sin salir del flujo de WebForge.</span>
+                    </div>
+                </div>
+                <iframe class="billing-modal__iframe" id="billing-modal-iframe" title="Checkout de suscripción WebForge" hidden></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer" aria-label="Pie de página">
+        <div class="footer-shell">
+            <div class="footer-brand">
+                <img src="assets/WebForgeLogo-NoBackground.png" alt="WebForge" class="footer-logo">
+                <div>
+                    <p class="footer-name">WebForge</p>
+                    <p class="footer-tag">Ecosistema tecnológico para empresas y personas</p>
+                </div>
+            </div>
+
+            <nav class="footer-nav" aria-label="Navegación secundaria">
+                <a href="index.html#inicio">Inicio</a>
+                <a href="index.html#servicios">Servicios</a>
+                <a href="index.html#soluciones">Soluciones</a>
+                <a href="plans.html">Planes</a>
+                <a href="index.html#contacto">Contacto</a>
+            </nav>
+
+            <div class="footer-meta">
+                <a href="mailto:agustinezequielmoreno@gmail.com">agustinezequielmoreno@gmail.com</a>
+                <a href="https://www.instagram.com/webforgeapp" target="_blank" rel="noopener noreferrer" aria-label="Instagram de WebForge">@webforgeapp</a>
+                <span>Bahía Blanca, Argentina</span>
+                <span>© 2026 WebForge. Todos los derechos reservados.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <script>
+        (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="3wp7x1uDEgOH5G_TDek85";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+    </script>
+
+    <!-- Scripts -->
+    <script src="frontend/js/main.js"></script>
+        <script>
+            (function () {
+                const TOKEN_KEY = 'webforge_token'
+                const USER_KEY = 'webforge_user'
+                const PENDING_PLAN_KEY = 'webforge_pending_plan'
+                const token = localStorage.getItem(TOKEN_KEY)
+                const stored = localStorage.getItem(USER_KEY)
+                const authButton = document.getElementById('plans-auth-btn')
+                const messageBox = document.getElementById('plans-flow-message')
+
+                let messageTimeoutId = null
+
+                const showMessage = (message, tone) => {
+                    if (!messageBox) return
+                    if (messageTimeoutId) {
+                        window.clearTimeout(messageTimeoutId)
+                    }
+                    messageBox.hidden = false
+                    messageBox.dataset.tone = tone || 'default'
+                    messageBox.textContent = message
+                    messageBox.classList.add('is-visible')
+
+                    messageTimeoutId = window.setTimeout(() => {
+                        messageBox.classList.remove('is-visible')
+                        window.setTimeout(() => {
+                            messageBox.hidden = true
+                        }, 240)
+                        messageTimeoutId = null
+                    }, 4200)
+                }
+
+                const authButtonMobile = document.getElementById('plans-auth-btn-mobile')
+
+                if (token && stored && authButton) {
+                    authButton.textContent = 'Cuenta'
+                    authButton.href = '/cuenta.html'
+                }
+
+                if (token && stored && authButtonMobile) {
+                    authButtonMobile.textContent = 'Cuenta'
+                    authButtonMobile.href = '/cuenta.html'
+                }
+
+                // Flujo de contratación: el usuario solicita el plan y el equipo lo activa manualmente.
+                const requestPlan = async (planCode) => {
+                    const currentToken = localStorage.getItem(TOKEN_KEY)
+                    if (!currentToken) {
+                        sessionStorage.setItem(PENDING_PLAN_KEY, planCode)
+                        window.location.href = '/login.html'
+                        return
+                    }
+
+                    try {
+                        const response = await fetch('/api/billing/request', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Accept: 'application/json',
+                                Authorization: `Bearer ${currentToken}`,
+                            },
+                            body: JSON.stringify({ plan: planCode }),
+                        })
+
+                        if (response.status === 401 || response.status === 403) {
+                            localStorage.removeItem(TOKEN_KEY)
+                            localStorage.removeItem(USER_KEY)
+                            sessionStorage.setItem(PENDING_PLAN_KEY, planCode)
+                            window.location.href = '/login.html'
+                            return
+                        }
+
+                        const result = await response.json().catch(() => ({}))
+                        if (!response.ok || !result.success) {
+                            throw new Error(result.message || 'No se pudo enviar la solicitud.')
+                        }
+
+                        showMessage(result.message || 'Solicitud enviada. Te contactaremos para activar tu plan.', 'success')
+                    } catch (error) {
+                        showMessage(error.message || 'No se pudo enviar la solicitud.', 'error')
+                    }
+                }
+
+                document.querySelectorAll('.plan-cta[data-plan-code]').forEach((button) => {
+                    button.addEventListener('click', (event) => {
+                        event.preventDefault()
+                        requestPlan(button.dataset.planCode)
+                    })
+                })
+
+                // Si el usuario volvió de registrarse o loguearse con un plan pendiente, lo solicitamos.
+                const pendingPlan = sessionStorage.getItem(PENDING_PLAN_KEY)
+                if (token && pendingPlan && ['starter', 'premium', 'business'].includes(pendingPlan)) {
+                    sessionStorage.removeItem(PENDING_PLAN_KEY)
+                    requestPlan(pendingPlan)
+                }
+            })()
+        </script>
+    <script src="/cookie-banner.js" defer></script>
+</body>
+</html>
